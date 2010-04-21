@@ -1,16 +1,30 @@
 OlympicGames{
 
-	classvar <>circle;
-	classvar <histResp;
+	var <>circle;
+	var <histResp;
 
-	*join{ |bcip, name|
+	var <>updateTime = 60;
+
+	var <>oracle;
+	var <>prophecy;
+	var <>gui;
+
+	*new{ |bcip, name|
+		^super.new.init(bcip,name )
+	}
+
+	init{ |bcip, name|
+		this.join(bcip,name)
+	}
+
+	join{ |bcip, name|
 		NetAddr.broadcastFlag = true;
 		Republic.fixedLangPort = false;
 		circle = Republic(NetAddrMP( bcip ).ports_( (57120..57124) ) ).makeDefault;
 		circle.join( name );
 	}
 
-	*startHistory{
+	startHistory{
 		histResp = OSCresponder(nil, '/hist', {|t,r,msg| 
 			History.enter(msg[2].asString, msg[1]) 
 		}).add; 	
@@ -23,8 +37,31 @@ OlympicGames{
 		History.localOff;
 	}
 
-	*makeGui{
+	makeGui{
 		EZRepublicGui(republic: circle);
+	}
+
+	makeGameGui{
+		^OlympicGui.new( Republic.default.allIDs, this )
+	}
+
+	startGames{
+		oracle = Oracle.new;
+		Tdef( \games,
+			{
+				loop{
+					GameTimer.new( "new oracle in..", 60, 1 );
+					prophecy = oracle.consult( \UGen );
+					updateTime.wait;
+					GameTimer.new( "new oracle in..", 60, 1 );
+					prophecy = oracle.consult( \Pattern );
+					updateTime.wait;
+				}
+			}
+		);
+
+		Tdef( \games ).play;
+		
 	}
 
 }

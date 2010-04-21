@@ -2,10 +2,15 @@
 ~ips = Republic.getBroadcastIPs.postcs;
 
 
-OlympicGames.join( ~ips[0], "athlete" );
+a = OlympicGames.new( ~ips[0], "athlete" );
+a.makeGameGui;
 
 OlympicGames.makeGui;
 OlympicGames.startHistory;
+
+a.prophecy
+a.startGames
+
 
 Republic.default.allIDs;
 
@@ -13,6 +18,16 @@ a = OlympicGui.new( Republic.default.allIDs );
 
 a.pviews.do{ |it| it.resize_( 9 )}
 
+
+Help.gui;
+
+OlympicGames.prophecy.asString
+
+GameTimer.makeWin
+
+TdefAllGui.new;
+
+a.updateGui;
 
 (
 var xsize = 1024,ysize=800;

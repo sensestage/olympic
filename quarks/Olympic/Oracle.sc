@@ -27,7 +27,7 @@ Oracle{
 			}
 		};
 		if ( type.asSymbol == \UGen ){
-			["Generators","Filters","InOut","Maths","Multichannel","Envelopes", ["FFT","Buffer","Trigger","Delays"].choose ].do{ |it|
+			["Generators","Filters","InOut","Maths","Multichannel","Envelopes", ["FFT","Buffer","Delays","Triggers"].choose ].do{ |it|
 				oracle.add( this.choose( ['UGens',it.asSymbol]));
 			};
 		};
