@@ -37,7 +37,7 @@ OlympicGui{
 		pvy = (ysize/4) - 4;
 		
 		pviews = participants.collect{ |key,val| 
-			TextView.new( pview, pvx@pvy ).background_( Color.magenta ).string_( key ).resize_( 5 );
+			OlympicAthleteGui.new( key, pview, pvx@pvy )
 		};
 
 		// bottom - some kind of timer
@@ -50,13 +50,93 @@ OlympicGui{
 			{ w.isClosed },
 			"OlympicGuiUpdater"
 		);
+		History.current.hasMovedOn = true;
 	}
 
 	updateGui{
-		ora.string_( game.prophecy.asString );
+		var pstring = "";
+		game.prophecy.do{ |it|
+			if ( it.isKindOf( Array )){
+				pstring = pstring + "\n";
+				it.do{ |jt|
+					pstring = pstring + it + "\t";
+				};
+			}{
+				pstring = pstring + it + "\t";
+
+			}
+		};
+		ora.string_( pstring );
 		timer.string_( GameTimer.getTime; );
 			//			GameTimer.lineShorts.asString );
-	}
-	
 
+		if ( History.current.hasMovedOn ) {
+			pview.do{ |it| it.update };
+			History.current.hasMovedOn = false;
+		};
+	}
+}
+
+OlympicAthleteGui{
+
+	var <>name,<>parent,<>bounds;
+
+	var <view,<list;
+
+	var lastLineSelected = 0, lastLinesShown;
+	var selectedLine, linesToShow;
+
+
+	*new{ |name,parent,bounds|
+		^super.new.name_(name).parent_(parent).bounds_(bounds).init;
+	}
+
+	init{
+		view = CompositeView.new( parent,bounds );
+		view.addFlowLayout( 0@0, 0@0 );
+		
+		list = ListView.new( view, bounds ).font_( Font.new("Helvetica",20 ) );
+		list.items_([])
+			.resize_(5)
+			.background_(Color.grey(0.62))
+		/*
+			.action_({ |lview|
+				var index = lview.value;
+				if (lview.items.isEmpty) {
+					"no entries yet.".postln;
+				} {
+					lastLineSelected = list.items[index];
+					//	this.postInlined(index)
+				}
+			})
+			.enterKeyAction_({ |lview|
+				var index = lview.value;
+				if (filtering) { index = filteredIndices[index] };
+				try {
+					History.current.lines[index][2].postln.interpret.postln;
+				//	"did execute.".postln;
+				} {
+					"execute line from history failed.".postln;
+				};
+			});
+		*/
+	}
+
+	update{
+		var newIndex;
+		selectedLine = (lastLinesShown ? [])[list.value];
+		linesToShow = History.current.lines.at( 
+			History.current.indicesFor( name );
+		);
+		if (linesToShow != lastLinesShown) {
+			//	"or updating listview here?".postln;
+			list.items_(linesToShow.collect{ |it| it[2] });
+			lastLinesShown = linesToShow;
+		};
+		newIndex = if (selectedLine.isNil) 
+		{ 0 }
+		{ linesToShow.indexOf(selectedLine) };
+			
+		list.value_(newIndex ? 0);
+	}
 }

@@ -3,13 +3,30 @@
 
 
 a = OlympicGames.new( ~ips[0], "athlete" );
-a.makeGameGui;
+a.startHistory;
 
-OlympicGames.makeGui;
-OlympicGames.startHistory;
+b= a.makeGameGui;
+
+b.pviews[\athlete].dump;
+
+b.pviews.first.update
+
+b.participants
+
+a.participants
+
+a.startGames
+Republic.default.allIDs.keys
+
+{ SinOsc.ar( 200, 0, 0.2) }.play(\all);
+
+a.makeGui;
+
+History.current.indicesFor( \athlete )
+
+History.current.lines.at( History.current.indicesFor( \athlete ) )
 
 a.prophecy
-a.startGames
 
 
 Republic.default.allIDs;

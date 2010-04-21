@@ -30,7 +30,7 @@ OlympicGames{
 		}).add; 	
 	
 		History.start;
-		History.makeWin; // this will have to be our own gui!
+		//		History.makeWin; // this will have to be our own gui!
 		History.forwardFunc = { |code|
 			circle.send(\all, '/hist', circle.nickname, code) 
 		};
@@ -42,7 +42,7 @@ OlympicGames{
 	}
 
 	makeGameGui{
-		^OlympicGui.new( Republic.default.allIDs, this )
+		^OlympicGui.new( Republic.default.allIDs.keys.asArray, this )
 	}
 
 	startGames{

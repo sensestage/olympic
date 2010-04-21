@@ -1,0 +1,12 @@
+(
+	\name: 			"OlympicExtra",
+	\path: 			"OlympicExtra",
+	\summary:		"Category extensions for Olympic LiveCoding.",
+	\author: 		"Marije Baalman",
+	\organization:	"Concordia University, Montreal",
+	\country: 		"Canada",
+	\helpdoc:		"Help/Olympic.html",
+//	\dependencies: ["MathLib"],
+	\since: 		"2010",
+	\version:		"0.1"
+)
