@@ -6,8 +6,37 @@ a = OlympicGames.new( ~ips[0], "athlete" );
 a.startHistory;
 
 b= a.makeGameGui;
+b.updateGui
 
-b.pviews[\athlete].dump;
+NetAddr.langPort
+
+a.startGames
+
+(
+SynthDef( \gray,
+	{ |out=0|
+		Out.ar( out, GrayNoise.ar( 0.4) )
+	}
+).share;
+)
+
+x = Synth.new( \gray, target: a.circle.servers.choose );
+
+a.circle.servers
+
+Pdef(\gray,
+	Pmono(
+		\gray,
+		
+	)
+)
+
+b.pviews[\athlete].;
+
+a.histResp
+History.makeWin;
+
+History.current.hasMovedOn
 
 b.pviews.first.update
 
@@ -15,7 +44,6 @@ b.participants
 
 a.participants
 
-a.startGames
 Republic.default.allIDs.keys
 
 { SinOsc.ar( 200, 0, 0.2) }.play(\all);

@@ -59,7 +59,7 @@ OlympicGui{
 			if ( it.isKindOf( Array )){
 				pstring = pstring + "\n";
 				it.do{ |jt|
-					pstring = pstring + it + "\t";
+					pstring = pstring + jt + "\t";
 				};
 			}{
 				pstring = pstring + it + "\t";
@@ -71,7 +71,7 @@ OlympicGui{
 			//			GameTimer.lineShorts.asString );
 
 		if ( History.current.hasMovedOn ) {
-			pview.do{ |it| it.update };
+			pviews.do{ |it| it.update };
 			History.current.hasMovedOn = false;
 		};
 	}
