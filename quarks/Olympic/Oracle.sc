@@ -17,16 +17,38 @@ Oracle{
 	consult{ |type|
 		var oracle = List.new;
 		if ( type.asSymbol == \Pattern ){
-			["Event","List","Filter","Math"].do{ |it|
+			[ 
+				"Event",
+				["List","Random"].choose , 
+				["Filter", "Math", "Repetition", "Time"].choose,
+				["Composition","Data Sharing","Function","Language Control","Server Control","Parallel"].choose 
+			].do{ |it|
 				oracle.add( this.choose( ['Streams-Patterns-Events',\Patterns,it.asSymbol]));
 			}
 		};
 		if ( type.asSymbol == \UGen ){
-			["Generators","Filters","InOut","Maths","Multichannel","Envelopes"].do{ |it|
+			["Generators","Filters","InOut","Maths","Multichannel","Envelopes", ["FFT","Buffer","Trigger","Delays"].choose ].do{ |it|
 				oracle.add( this.choose( ['UGens',it.asSymbol]));
 			};
 		};
+		oracle.add( this.chooseOps(2,2) );
 		^oracle
+	}
+
+	chooseOps{ |nUn=2,nBin=2|
+		var unaries,binaries;
+		unaries = AbstractFunction.methods.select { |l| 
+                l.findReferences(\composeUnaryOp).notNil
+        };
+        
+        binaries = AbstractFunction.methods.select { |l| 
+                l.findReferences(\composeBinaryOp).notNil
+        };
+        
+		^( 
+			({ unaries.choose.name } ! nUn)
+			++ ({ binaries.choose.name } ! nBin);
+		)
 	}
 
 	buildTree{
@@ -42,10 +64,10 @@ Oracle{
 		node = tree;
 		cats.do{ |it|
 			node = node.at( it.asSymbol );
-			[it,node].postln;
+			//		[it,node].postln;
 		};
 		res = node.choose;
-		res.postln;
+		//		res.postln;
 		if ( res.isKindOf( Dictionary ) ){
 			res = this.chooseFromDict( res );
 		}
@@ -55,11 +77,11 @@ Oracle{
 	chooseFromDict{ |dict|
 		var res;
 		res = dict.choose;
-		res.postln;
+		//	res.postln;
 		if ( res.isKindOf( Dictionary ) ){
 			res = this.chooseFromDict( res );
 		};
-		res.postln;
+		//	res.postln;
 		^res;
 	}
 

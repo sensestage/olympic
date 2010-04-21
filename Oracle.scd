@@ -61,7 +61,7 @@ UGen.allSubclasses.postcs
 
 
 (
-~tree.keysValuesDo{ |key,v|
+o.tree.keysValuesDo{ |key,v|
 	key.postcs;
 	v.keysValuesDo{ |key,v| "\t".post; key.postcs;
 		v.keysValuesDo{ |key,v| "\t\t".post; key.postcs;
@@ -81,6 +81,9 @@ UGen.allSubclasses.postcs
 
 ~tree["UGens"].keys
 
+Help.gui;
+Help.rebuildTree;
+
 o = Oracle.new;
 
 o.consult( \UGen )
@@ -89,7 +92,7 @@ o.consult( \Pattern )
 
 o.tree.keys
 
-o.tree.at('Streams-Patterns-Events').keys.postcs
+o.tree.at('Streams-Patterns-Events').at('Patterns').keys.postcs
 
 o.choose( ["UGens"] )
 o.choose( ["UGens","Synth control"] )
