@@ -101,9 +101,15 @@ OlympicGames{
 				{
 					loop{
 						[\UGen, \Pattern].do{ |it|
+							if ( prophecy.notNil ){
+								//	History.enter( Oracle.asString( prophecy ), circle.nickname );
+								circle.send(\all, '/hist', circle.nickname, 
+									prophecy
+								); 
+							};
 							GameTimer.new( "new oracle in..", updateTime.floor, 1 );
-							prophecy = oracle.consult( it );
-							broadcast.sendMsg( '/oracle', Oracle.asString(prophecy) ); 
+							prophecy = Oracle.asString( oracle.consult( it ) );
+							broadcast.sendMsg( '/oracle', prophecy ); 
 							updateTime.wait;
 						};
 					}

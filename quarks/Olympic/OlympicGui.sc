@@ -30,7 +30,7 @@ OlympicGui{
 			fontSize = 20;
 			bannerSize = 170;
 		}{
-			myXsize = 800;
+			myXsize = 1000;
 			myYsize = 400;
 			fontSize = 12;
 			bannerSize = 60;
@@ -39,7 +39,7 @@ OlympicGui{
 		w = Window.new("Olympic Games", Rect(0,0, myXsize, myYsize));
 		
 		// top - the oracle
-		ora = TextView.new( w, Rect( 0,0, myXsize, bannerSize )).background_( Color.white ).align_( 'center' ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", fontSize*2) );
+		ora = TextView.new( w, Rect( 0,0, myXsize, bannerSize )).background_( Color.white ).align_( 'center' ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", fontSize*1.5) );
 
 		// mid - the participants
 		pview = CompositeView.new( w, Rect( 0, bannerSize, myXsize, myYsize-(2*bannerSize) ) ).resize_( 5 );
@@ -70,11 +70,10 @@ OlympicGui{
 	updateGui{
 		if ( game.type == \host ){
 			timer.string_( GameTimer.getTime; );
-			ora.string_( Oracle.asString( game.prophecy ) );
 		}{
 			timer.string_( game.time );
-			ora.string_( game.prophecy );
 		};
+		ora.string_( game.prophecy );
 		if ( History.current.hasMovedOn ) {
 			pviews.do{ |it| it.update };
 			History.current.hasMovedOn = false;
