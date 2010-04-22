@@ -14,6 +14,22 @@ Oracle{
 		this.buildTree;
 	}
 
+	*asString{ |proph|
+		var pstring = "";
+		proph.do{ |it|
+			if ( it.isKindOf( Array )){
+				pstring = pstring + "\n";
+				it.do{ |jt|
+					pstring = pstring + jt + "\t";
+				};
+			}{
+				pstring = pstring + it + "\t";
+
+			}
+		};
+		^pstring;
+	}
+
 	consult{ |type|
 		var oracle = List.new;
 		if ( type.asSymbol == \Pattern ){

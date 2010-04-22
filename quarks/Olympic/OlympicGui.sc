@@ -54,22 +54,13 @@ OlympicGui{
 	}
 
 	updateGui{
-		var pstring = "";
-		game.prophecy.do{ |it|
-			if ( it.isKindOf( Array )){
-				pstring = pstring + "\n";
-				it.do{ |jt|
-					pstring = pstring + jt + "\t";
-				};
-			}{
-				pstring = pstring + it + "\t";
-
-			}
+		if ( game.type == \host ){
+			timer.string_( GameTimer.getTime; );
+			ora.string_( Oracle.asString( game.prophecy ) );
+		}{
+			timer.string_( game.time );
+			ora.string_( game.prophecy );
 		};
-		ora.string_( pstring );
-		timer.string_( GameTimer.getTime; );
-			//			GameTimer.lineShorts.asString );
-
 		if ( History.current.hasMovedOn ) {
 			pviews.do{ |it| it.update };
 			History.current.hasMovedOn = false;

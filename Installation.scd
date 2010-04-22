@@ -8,7 +8,13 @@
 );
 
 
-//~olympic.gui;
-
+~olympic.gui;
+);
 ~olympic.install( "Olympic" )
-)
+
+
+// only if you don't have a very recent version of SC (trunk rev. 10094; April 20)
+~olympic.install( "OlympicExtra" )
+
+// From the main quarks repository (svn revision 1477):
+Quarks.install( "Republic" );

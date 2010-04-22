@@ -51,11 +51,14 @@ GameTimer {
 			this.formatTime(it.curtime)+" | " + this.formatTime(it.endtime) + " | " + it.name) }.asArray.sort.reverse;
 	}
 
-	*getTime{
-		if ( all.size > 0 ){
-			^this.formatTime( all.choose.curtime );
-		}
-		^this.formatTime( 0 );
+	*getTime{ |key=\last|
+		if ( key == \last ){
+			key = uniqueID - 1;
+		};
+		if ( all[key.asSymbol].notNil ){
+			^this.formatTime( all[key.asSymbol].curtime );
+		};
+		^0
 	}
 
 	*formatTime { arg val;
@@ -93,7 +96,8 @@ GameTimer {
 			this.all.keysValuesDo{ |key,timer|
 				sendIPs.do{ |it|
 					it.sendMsg( "/game/timer", key, 
-						(""+this.formatTime(timer.curtime)+" | " + this.formatTime(timer.endtime) + " | " + timer.name)
+						GameTimer.getTime( key )
+						//	(""+this.formatTime(timer.curtime)+" | " + this.formatTime(timer.endtime) + " | " + timer.name)
 					);
 				};
 			};
