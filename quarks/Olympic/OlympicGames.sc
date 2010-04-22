@@ -16,6 +16,8 @@ OlympicGames{
 
 	var <broadcast;
 
+	var s;
+
 	*new{ |bcip, name|
 		^super.new.init(bcip,name )
 	}
@@ -33,18 +35,40 @@ OlympicGames{
 		circle.join( name );
 	}
 
+	s{
+		^circle.s;
+	}
+
+	host{
+		^circle.servers[\host];
+	}
+
+	me{
+		^circle.servers[circle.nickname];
+	}
+
+	random{
+		^circle.servers.choose;
+	}
+
 	asHost{
 		type = \host;
 	}
 
+	/*
+	makeDefault{
+		Server.default = circle.s;
+	}
+	*/
+
 	createListeners{
 		timeResp = OSCresponder(nil, '/game/timer', {|t,r,msg|
-			msg.postln;
+			//	msg.postln;
 			time = msg[2];
 		}).add;
 		oracleResp = OSCresponder(nil, '/oracle', {|t,r,msg|
-			msg.postln;
-			oracle = msg[2];
+			//	msg.postln;
+			prophecy = msg[1];
 		}).add;
 	}
 
@@ -76,14 +100,12 @@ OlympicGames{
 			Tdef( \games,
 				{
 					loop{
-						GameTimer.new( "new oracle in..", updateTime.floor, 1 );
-						prophecy = oracle.consult( \UGen );
-						circle.send(\all, '/oracle', circle.nickname, prophecy); 
-						updateTime.wait;
-						GameTimer.new( "new oracle in..", updateTime.floor, 1 );
-						prophecy = oracle.consult( \Pattern );
-						circle.send(\all, '/oracle', circle.nickname, prophecy); 
-						updateTime.wait;
+						[\UGen, \Pattern].do{ |it|
+							GameTimer.new( "new oracle in..", updateTime.floor, 1 );
+							prophecy = oracle.consult( it );
+							broadcast.sendMsg( '/oracle', Oracle.asString(prophecy) ); 
+							updateTime.wait;
+						};
 					}
 				}
 			);

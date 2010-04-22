@@ -19,29 +19,43 @@ OlympicGui{
 
 	init{ |participants,g|
 		var pvs,pvx,pvy;
+		var myXsize, myYsize, fontSize, bannerSize;
 		var noParticipants = participants.size;
 
 		game = g;
-		w = Window.new("Olympic Games", Rect(0,0,xsize,ysize));
+
+		if ( game.type == \host ){
+			myXsize = xsize;
+			myYsize = ysize;
+			fontSize = 20;
+			bannerSize = 170;
+		}{
+			myXsize = 800;
+			myYsize = 400;
+			fontSize = 12;
+			bannerSize = 60;
+		};
+
+		w = Window.new("Olympic Games", Rect(0,0, myXsize, myYsize));
 		
 		// top - the oracle
-		ora = TextView.new( w, Rect( 0,0, xsize, ysize/4)).background_( Color.white ).align_( 'center' ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", 40) );
+		ora = TextView.new( w, Rect( 0,0, myXsize, bannerSize )).background_( Color.white ).align_( 'center' ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", fontSize*2) );
 
 		// mid - the participants
-		pview = CompositeView.new( w, Rect( 0, ysize/4, xsize, ysize/2 )).resize_( 5 );
+		pview = CompositeView.new( w, Rect( 0, bannerSize, myXsize, myYsize-(2*bannerSize) ) ).resize_( 5 );
 		pview.addFlowLayout(2@2,2@2);
 		
 		// initialise array with 0's
 		//		pvs = Array.fill( noParticipants, 0 );
-		pvx = (xsize - ((noParticipants / 2)*2 + 4))/(noParticipants / 2);
-		pvy = (ysize/4) - 4;
+		pvx = (myXsize - (noParticipants*2 + 2)) / noParticipants;
+		pvy = myYsize - (2*bannerSize) - 4;
 		
 		pviews = participants.collect{ |key,val| 
-			OlympicAthleteGui.new( key, pview, pvx@pvy )
+			OlympicAthleteGui.new( key, pview, pvx@pvy, fontSize )
 		};
 
 		// bottom - some kind of timer
-		timer = StaticText.new( w, Rect( 0,3*ysize/4, xsize, ysize/4)).background_( Color.white ).align_('center').resize_( 8 ).string_( "TIMER").font_( Font( "Helvetica", 120) );	
+		timer = StaticText.new( w, Rect( 0,myYsize-bannerSize, myXsize, bannerSize)).background_( Color.white ).align_('center').resize_( 8 ).string_( "TIMER").font_( Font( "Helvetica", fontSize*6) );	
 		w.front;
 
 		updater = SkipJack.new(
@@ -73,23 +87,28 @@ OlympicAthleteGui{
 	var <>name,<>parent,<>bounds;
 
 	var <view,<list;
+	var <nameV,<latest;
 
 	var lastLineSelected = 0, lastLinesShown;
 	var selectedLine, linesToShow;
 
-
-	*new{ |name,parent,bounds|
-		^super.new.name_(name).parent_(parent).bounds_(bounds).init;
+	*new{ |name,parent,bounds,fontSize|
+		^super.new.name_(name).parent_(parent).bounds_(bounds).init( fontSize );
 	}
 
-	init{
+	init{ |fontSize|
+
 		view = CompositeView.new( parent,bounds );
 		view.addFlowLayout( 0@0, 0@0 );
-		
-		list = ListView.new( view, bounds ).font_( Font.new("Helvetica",20 ) );
+
+		nameV = StaticText.new( view, (bounds.x @ 22 ) ).font_( Font.new( "Helvetica", fontSize )).string_( name ).resize_(2).align_(\center);
+
+		latest = TextView.new( view, (bounds.x @ (bounds.y-22/2) )).font_( Font.new( "Helvetica", fontSize )).resize_(2);
+
+		list = ListView.new( view, (bounds.x @ (bounds.y-22/2) ) ).font_( Font.new("Helvetica", fontSize ) );
 		list.items_([])
 			.resize_(5)
-			.background_(Color.grey(0.62))
+			.background_(Color.grey(0.8))
 		/*
 			.action_({ |lview|
 				var index = lview.value;
@@ -120,6 +139,10 @@ OlympicAthleteGui{
 			History.current.indicesFor( name );
 		);
 		if (linesToShow != lastLinesShown) {
+			if ( linesToShow.first.notNil ){
+				//	linesToShow.first.postln;
+				latest.string = linesToShow.first.at( 2 );
+			};
 			//	"or updating listview here?".postln;
 			list.items_(linesToShow.collect{ |it| it[2] });
 			lastLinesShown = linesToShow;

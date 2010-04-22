@@ -1,7 +1,9 @@
+/*
 + Symbol {
 
 	asTarget{
-		var republic = republic ? Republic.default;
+		var republic = Republic.default;
+		republic.postln;
 		if(republic.notNil) { 
 			^republic.servers.at( this );
 		}
@@ -9,3 +11,4 @@
 	}
 	
 }
+*/
