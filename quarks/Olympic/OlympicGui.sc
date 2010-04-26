@@ -53,13 +53,15 @@ OlympicGui{
 		w = Window.new("Olympic Games", Rect(0,0, myXsize, myYsize));
 		
 		// top - the oracle
-		ora = TextView.new( w, Rect( 0,0, myXsize, bannerSize )).background_( Color.white ).align_( 'center' ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", fontSize*1.5) );
+		ora = TextView.new( w, Rect( 0,0, myXsize, bannerSize )).background_( Color.white ).resize_( 2 ).string_( "Oracle" ).font_( Font( "Helvetica", fontSize*1.5) );
 		ora.keyDownAction_({ |txvw, char, mod, uni, keycode|
 			// char.postcs;
 			if ([3, 13].includes(char.ascii)) {
 				this.rip(txvw.string);
 			};
 		});
+
+		try{ ora.align_( 'center' ) };
 
 		// mid - the participants
 		pview = CompositeView.new( w, Rect( 0, bannerSize, myXsize, myYsize-(2*bannerSize) ) ).resize_( 5 );
