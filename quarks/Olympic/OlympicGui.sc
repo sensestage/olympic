@@ -89,6 +89,7 @@ OlympicGui{
 		if ( noParticipants > pviews.size ){
 
 			pview.removeAll;
+			pview.decorator.reset;
 			pviews = [];
 			
 			pvx = (myXsize - (noParticipants*2 + 2)) / noParticipants;
@@ -192,7 +193,8 @@ OlympicAthleteGui{
 		list.items_([])
 			.resize_(5)
 			.background_(Color.grey(0.8))
-		.action_({ |lview|
+		.enterKeyAction_({ |lview|
+			//	.action_({ |lview|
 			var index = lview.value;
 			if (lview.items.isEmpty) {
 				"no entries yet.".postln;

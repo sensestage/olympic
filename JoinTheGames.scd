@@ -5,24 +5,25 @@ a = OlympicGames.new( ~ips[0], "host" );
 a.startHistory;
 
 // only the host should be the host:
-//
- a.asHost;
+// a.asHost;
 a.startGames
 
-a.type
+// Two ways to grab code from the GUI
+// - by opening a Window with a TextView (gui method)
+// - by posting the code into a new document (only scapp and scel at the moment)
+OlympicGui.useDocClass = true; // by default it is false, so the GUI method
 
-OlympicGui.useDocClass = true;
-
-
-
+// create the game gui:
 b= a.makeGameGui;
 
-b.doc
-b.doc.string_("ehll")
-b.doc.front
 
-a.host.freeAll;
+// In the backend of the games the Republic is used, so also take a look at the helpfiles of that quark to learn about coding in the republic environment
 
+// this sets up the Republic style GUI:
+a.makeGui
+
+
+// creating a synthdef and sharing it with others
 (
 SynthDef( \gray,
 	{ |out=0,amp=0.1|
@@ -31,13 +32,12 @@ SynthDef( \gray,
 ).share;
 )
 
-History.makeWin
-
-
+// playing it at the host:
 x = Synth.new( \gray, target: a.host; );
 
 x.free;
 
+// playing it locally:
 x = Synth.new( \gray, target: a.me );
 
 x.free;
@@ -68,12 +68,13 @@ c = (server: a.host, instrument: \xxy, freq: exprand(300, 1000)).play;
 
 (server: a.s, instrument: \xxy, where: \XXX, freq: exprand(300, 1000)).play;
 
+// using a pattern:
 (
 Pdef(\x,
 	Pbind(
 		\instrument, \xxy,
-		\server, a.s,
-		\where, Prand([\host], 8), // 
+		\server, a.s, // a.s chooses the republic server
+		\where, Prand([\host], 8), // where controls the targer
 		\dur, 1,
 		\legato, 0.3, 
 		\freq, Pwhite().linexp(0, 1, 500, 2000)
