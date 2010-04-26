@@ -1,7 +1,7 @@
 // check broadcast IPs
 ~ips = Republic.getBroadcastIPs.postcs;
 
-a = OlympicGames.new( ~ips[0], "host" );
+a = OlympicGames.new( ~ips[0], <yournamehere> );
 a.startHistory;
 
 // only the host should be the host:
