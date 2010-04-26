@@ -1,14 +1,27 @@
 // check broadcast IPs
 ~ips = Republic.getBroadcastIPs.postcs;
 
-a = OlympicGames.new( ~ips[0], <myname> );
+a = OlympicGames.new( ~ips[0], "host" );
 a.startHistory;
 
 // only the host should be the host:
-// a.asHost;
+//
+ a.asHost;
 a.startGames
 
+a.type
+
+OlympicGui.useDocClass = true;
+
+
+
 b= a.makeGameGui;
+
+b.doc
+b.doc.string_("ehll")
+b.doc.front
+
+a.host.freeAll;
 
 (
 SynthDef( \gray,
@@ -17,6 +30,8 @@ SynthDef( \gray,
 	}
 ).share;
 )
+
+History.makeWin
 
 
 x = Synth.new( \gray, target: a.host; );

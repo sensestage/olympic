@@ -6,11 +6,11 @@ OlympicGames{
 	var <>updateTime = 60;
 
 	var <>oracle;
-	var <>prophecy;
+	var <>prophecy = "";
 	var <>gui;
 
 	var <>type; // \host, \player
-	var <time;
+	var <time = 0;
 
 	var <timeResp,<oracleResp;
 
@@ -74,12 +74,17 @@ OlympicGames{
 
 	startHistory{
 		histResp = OSCresponder(nil, '/hist', {|t,r,msg| 
-			History.enter(msg[2].asString, msg[1]) 
+			//	("histResp"+msg).postln;
+			//	msg.postcs;
+			if ( msg[2].asString.size > 0 ){
+				History.enter(msg[2].asString, msg[1]);
+			};
 		}).add; 	
 	
 		History.start;
 		//		History.makeWin; // this will have to be our own gui!
 		History.forwardFunc = { |code|
+			//	("hist forward" + code).postln;
 			circle.send(\all, '/hist', circle.nickname, code) 
 		};
 		History.localOff;
@@ -90,7 +95,11 @@ OlympicGames{
 	}
 
 	makeGameGui{
-		^OlympicGui.new( circle.allIDs.keys.asArray, this )
+		^OlympicGui.new( this )
+	}
+
+	participants{
+		^circle.allIDs.keys.asArray;
 	}
 
 	startGames{
@@ -103,6 +112,7 @@ OlympicGames{
 						[\UGen, \Pattern].do{ |it|
 							if ( prophecy.notNil ){
 								//	History.enter( Oracle.asString( prophecy ), circle.nickname );
+								//	prophecy.postln;
 								circle.send(\all, '/hist', circle.nickname, 
 									prophecy
 								); 
